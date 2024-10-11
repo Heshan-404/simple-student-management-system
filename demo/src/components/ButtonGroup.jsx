@@ -3,18 +3,43 @@ import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Box } from "@mui/material";
+
+import { styled } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import axios from "axios";
+
+const VisuallyHiddenInput = styled("input")({
+  clip: "rect(0 0 0 0)",
+  clipPath: "inset(50%)",
+  height: 1,
+  overflow: "hidden",
+  position: "absolute",
+  bottom: 0,
+  left: 0,
+  whiteSpace: "nowrap",
+  width: 1,
+});
 
 export default function NavigationButtons() {
   const [visibleAddStudentForm, setVisbleAddStudentForm] =
     React.useState(false);
   const [open, setOpen] = React.useState(false);
 
+  React.useEffect(() => {
+    axios
+      .get("http://localhost:3000/api/get-new-student-id")
+      .then((result) => {
+        rows = result.data;
+        console.log(rows);
+      })
+      .catch((error) => console.log(error));
+  });
   const handleClose = () => {
     setOpen(false);
   };
@@ -41,7 +66,24 @@ export default function NavigationButtons() {
             <DialogContentText>
               To register student, please enter details here.
             </DialogContentText>
-            <DialogTitle sx={{p:2,pl:0,pb:1}}>Student Details</DialogTitle>
+            <DialogTitle sx={{ p: 2, pl: 0, pb: 1 }}>
+              Student Details
+            </DialogTitle>
+            <span style={{ marginRight: "30px" }}>Image : </span>
+            <Button
+              component="label"
+              role={undefined}
+              variant="contained"
+              tabIndex={-1}
+              startIcon={<CloudUploadIcon />}
+            >
+              Upload files
+              <VisuallyHiddenInput
+                type="file"
+                onChange={(event) => console.log(event.target.files)}
+                multiple
+              />
+            </Button>
             <TextField
               autoFocus
               required
@@ -72,7 +114,9 @@ export default function NavigationButtons() {
               fullWidth
               variant="standard"
             />
-            <DialogTitle sx={{p:2,pl:0,pb:1}}>Gardien Details</DialogTitle>
+            <DialogTitle sx={{ p: 2, pl: 0, pb: 1 }}>
+              Gardien Details
+            </DialogTitle>
             <TextField
               autoFocus
               required
