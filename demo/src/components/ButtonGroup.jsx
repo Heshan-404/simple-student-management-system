@@ -1,0 +1,130 @@
+import * as React from "react";
+import Stack from "@mui/material/Stack";
+import Button from "@mui/material/Button";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { Box } from "@mui/material";
+import TextField from "@mui/material/TextField";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+
+export default function NavigationButtons() {
+  const [visibleAddStudentForm, setVisbleAddStudentForm] =
+    React.useState(false);
+  const [open, setOpen] = React.useState(false);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  return (
+    <div>
+      <React.Fragment>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          PaperProps={{
+            component: "form",
+            onSubmit: (event) => {
+              event.preventDefault();
+              const formData = new FormData(event.currentTarget);
+              const formJson = Object.fromEntries(formData.entries());
+              const name = formJson.name;
+              console.log(name);
+              handleClose();
+            },
+          }}
+        >
+          <DialogTitle>Add Student</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              To register student, please enter details here.
+            </DialogContentText>
+            <DialogTitle sx={{p:2,pl:0,pb:1}}>Student Details</DialogTitle>
+            <TextField
+              autoFocus
+              required
+              margin="dense"
+              id="name"
+              name="name"
+              label="Name"
+              fullWidth
+              variant="standard"
+            />
+            <TextField
+              autoFocus
+              required
+              margin="dense"
+              id="age"
+              name="age"
+              label="Age"
+              fullWidth
+              variant="standard"
+            />
+            <TextField
+              autoFocus
+              required
+              margin="dense"
+              id="contact"
+              name="contact"
+              label="Contact"
+              fullWidth
+              variant="standard"
+            />
+            <DialogTitle sx={{p:2,pl:0,pb:1}}>Gardien Details</DialogTitle>
+            <TextField
+              autoFocus
+              required
+              margin="dense"
+              id="gname"
+              name="name"
+              label="Name"
+              fullWidth
+              variant="standard"
+            />
+            <TextField
+              autoFocus
+              required
+              margin="dense"
+              id="address"
+              name="address"
+              label="Address"
+              fullWidth
+              variant="standard"
+            />
+            <TextField
+              autoFocus
+              required
+              margin="dense"
+              id="gcontact"
+              name="contact"
+              label="Contact"
+              fullWidth
+              variant="standard"
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button type="submit">Subscribe</Button>
+          </DialogActions>
+        </Dialog>
+      </React.Fragment>
+      <Box sx={{ m: "4rem" }}>
+        <Stack direction="row" spacing={2}>
+          <Button
+            variant="contained"
+            color="success"
+            onClick={() => setOpen(true)}
+          >
+            Add Student
+          </Button>
+          <Button variant="contained">Reload</Button>
+          <Button variant="outlined" startIcon={<DeleteIcon />}>
+            Delete
+          </Button>
+        </Stack>
+      </Box>
+    </div>
+  );
+}
