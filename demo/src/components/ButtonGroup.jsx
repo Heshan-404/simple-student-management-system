@@ -10,8 +10,8 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import axios from "axios";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload"; 
+import axiosInstance from "../axiosConfig";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -30,12 +30,11 @@ export default function NavigationButtons() {
   const [nextID, setNextID] = React.useState();
 
   React.useEffect(() => {
-    axios
-      .get("http://localhost:3000/api/get-new-student-id")
+    axiosInstance
+      .get("/api/get-new-student-id")
       .then((result) => {
         setNextID(result.data);
         console.log(result.data);
-        
       })
       .catch((error) => console.log(error));
   }, []);
@@ -55,11 +54,14 @@ export default function NavigationButtons() {
     };
 
     try {
-      const response = await axios.post("http://localhost:3000/api/register-student", studentData);
+      const response = await axiosInstance.post(
+        "/api/register-student",
+        studentData
+      );
       console.log(response.data);
       handleClose();
     } catch (error) {
-      console.error( error);
+      console.error(error);
     }
   };
 
@@ -169,7 +171,7 @@ export default function NavigationButtons() {
             Add Student
           </Button>
           <Button variant="contained">Reload</Button>
-          <Button variant="outlined" startIcon={<DeleteIcon />}>
+          <Button variant="contained" color="error" startIcon={<DeleteIcon />}>
             Delete
           </Button>
         </Stack>

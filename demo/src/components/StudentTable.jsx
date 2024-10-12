@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
-import { Button } from "@mui/material";
-import axios from "axios";
+import { Button } from "@mui/material"; 
+import axiosInstance from "../axiosConfig";
 
 const columns = [
   { field: "studentID", headerName: "Student ID", width: 150 },
@@ -20,12 +20,10 @@ export default function DataTable() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await axios.get(
-          "http://localhost:3000/api/get-all-student-list"
-        );
+        const result = await axiosInstance.get("/api/get-all-student-list");
         const transformedData = result.data.map((item, index) => ({
           ...item,
-          id: `${item.studentID}`,
+          id: `${item.studentID}}`,
         }));
         setRows(transformedData);
       } catch (error) {
