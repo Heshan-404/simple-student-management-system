@@ -4,40 +4,43 @@ import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import { Button } from "@mui/material";
 import axios from "axios";
-import data from "../data/studentData";
 
 const columns = [
-  { field: "studentID", headerName: "Name", width: 300 },
-  {
-    field: "age",
-    headerName: "Age",
-    type: "number",
-    width: 50,
-  },
-  { field: "contact", headerName: "Contact", width: 120 },
-  { field: "address", headerName: "Address", width: 200 },
+  { field: "studentID", headerName: "Student ID", width: 150 },
+  { field: "name", headerName: "Name", width: 300 },
+  { field: "age", headerName: "Age", type: "number", width: 50 },
+  { field: "contactNo", headerName: "Contact", width: 120 },
 ];
 
 export default function DataTable() {
-  var row = [];
-  const paginationModel = { page: 0, pageSize: 5 };
+  const [rows, setRows] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
-  useEffect(() => {
-    // axios
-    //   .get("http://localhost:3000/api/get-all-student-list")
-    //   .then((result) => {
-    //     rows = result.data;
-    //     console.log(rows);
+  const paginationModel = { page: 0, pageSize: 5 };
 
-    //   })
-    //   .catch((error) => console.log(error));
-    row = data;
-  });
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await axios.get(
+          "http://localhost:3000/api/get-all-student-list"
+        );
+        const transformedData = result.data.map((item, index) => ({
+          ...item,
+          id: `${item.studentID}`,
+        }));
+        setRows(transformedData);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <Box sx={{ m: "2rem" }}>
       <Paper sx={{ height: 400, width: "100%" }}>
         <DataGrid
-          rows={row}
+          rows={rows}
           columns={columns}
           initialState={{ pagination: { paginationModel } }}
           pageSizeOptions={[5, 10]}
@@ -45,7 +48,9 @@ export default function DataTable() {
           checkboxSelection
           onRowSelectionModelChange={(ids) => {
             const selectedIDs = new Set(ids);
-            const selectedRows = rows.filter((row) => selectedIDs.has(row.id));
+            const selectedRows = rows.filter((row) =>
+              console.log(ids)            
+            );
             setSelectedRows(selectedRows);
           }}
         />
@@ -55,7 +60,7 @@ export default function DataTable() {
           console.log(selectedRows);
         }}
       >
-        log
+        Log Selected
       </Button>
     </Box>
   );
